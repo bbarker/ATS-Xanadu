@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   #
   # PATSHOME = "${ats2}";
   # PATSHOMERELOC # set to ATS2-contrib dir if needed
-
+  
   # configurePhase = ''
   #  patchShebangs doc/DISTRIB/ATS-Postiats/autogen.sh
   #  export XATSHOME=$PWD
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   # '';
 
   shellHook = ''
+    source ${ats2}/nix-support/setup-hook
     source ./nix/path_hack.sh
   '';
 }
