@@ -27,9 +27,11 @@ stdenv.mkDerivation rec {
     (toString path) != (toString ../.git)
   ) ../.;
 
-  PATSHOME = "${ats2}";
-
-  PATSHOMERELOC = "ATS2-${ats2.version}";
+  #
+  # The following need to be fixed; check the package setupHook:
+  #
+  # PATSHOME = "${ats2}";
+  # PATSHOMERELOC # set to ATS2-contrib dir if needed
 
   # configurePhase = ''
   #  patchShebangs doc/DISTRIB/ATS-Postiats/autogen.sh
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
   # '';
 
   shellHook = ''
-    export PATSHOME=${PATSHOME}
     source ./nix/path_hack.sh
   '';
 }
+
