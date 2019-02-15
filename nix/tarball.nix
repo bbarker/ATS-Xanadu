@@ -12,6 +12,7 @@
 
 { stdenv
 , ats2
+, boehmgc
 , gmp
 , autoconf
 , automake
@@ -21,17 +22,14 @@
 stdenv.mkDerivation rec {
   name = "ATS3-Xanadu-${version}.tgz";
 
-  buildInputs = [ autoconf automake gmp ];
+  buildInputs = [ autoconf automake boehmgc gmp ];
 
   src = builtins.filterSource (path: type:
     (toString path) != (toString ../.git)
   ) ../.;
 
-  #
-  # The following need to be fixed; check the package setupHook:
-  #
-  # PATSHOME = "${ats2}";
-  # PATSHOMERELOC # set to ATS2-contrib dir if needed
+  PATSHOME = "${ats2}/lib/ats2-postiats-${ats2.version}";
+  PATSHOMERELOC = "${PATSHOME}";
   
   # configurePhase = ''
   #  patchShebangs doc/DISTRIB/ATS-Postiats/autogen.sh
@@ -39,17 +37,18 @@ stdenv.mkDerivation rec {
   #  make -f codegen/Makefile_atslib
   # '';
  
-  buildPhase = ''
-    make -f srcgen/Makefile_stat
-  '';
+  # buildPhase = ''
+  #   make -f srcgen/Makefile_stat
+  # '';
 
   # installPhase = ''
   #   mv doc/DISTRIB/${name} $out
   # '';
 
   shellHook = ''
-    source ${ats2}/nix-support/setup-hook
+    export XATSHOME=$PWD
     source ./nix/path_hack.sh
+    export LD_LIBRARY_PATH=LD_LIBRARY_PATH:"${boehmgc}/lib"
   '';
 }
 

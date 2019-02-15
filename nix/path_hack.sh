@@ -1,2 +1,3 @@
 #!/bin/sh
-export PATH=${PATH}:${XATSHOME}/bin
+export PATH=${PATH}:${PATSHOME}/bin:${XATSHOME}/bin
+
